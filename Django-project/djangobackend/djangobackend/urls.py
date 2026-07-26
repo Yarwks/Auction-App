@@ -21,7 +21,6 @@ from products.views import ProductListCreateView, ProductDetailView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/products/', ProductListCreateView.as_view(), name='product-list'),
-    path('api/products/<int:pk>/', ProductDetailView.as_view(), name='product-detail'),
-        path('', include('pages.urls')),
+    path('api/', include('api.urls')),  
+    path('', include('pages.urls')),
 ]
