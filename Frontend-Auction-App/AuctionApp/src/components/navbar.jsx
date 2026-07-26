@@ -2,7 +2,12 @@ import { Link, useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const token = localStorage.getItem('access_token');
+  const location = useLocation();
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    setToken(localStorage.getItem('access_token'));
+  }, [location]);
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
