@@ -1,0 +1,27 @@
+name: Build and Test Docker Containers
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repo
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Test Docker Compose Build
+      run: |
+        docker compose build
+
+    - name: Run Backend Container Test
+      run: |
+        docker compose up -d
+        docker compose ps
