@@ -14,8 +14,8 @@ export default function Login() {
       const res = await API.post('/auth/login/', formData);
       localStorage.setItem('access_token', res.data.access);
       localStorage.setItem('refresh_token', res.data.refresh);
-      navigate('/');
-      useLocation().reload(); 
+      
+      window.location.href = '/'; 
     } catch (err) {
       setError('invalid username or password!');
     }
