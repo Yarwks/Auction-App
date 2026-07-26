@@ -18,4 +18,4 @@ COPY . /app/
 
 # 6. Expose port and run server
 EXPOSE 8000
-CMD ["gunicorn", "djangobackend.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD python manage.py migrate && gunicorn djangobackend.wsgi:application --bind 0.0.0.0:8000
