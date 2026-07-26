@@ -25,3 +25,6 @@ jobs:
       run: |
         docker compose up -d
         docker compose ps
+
+    - name: Trigger Render Deploy
+      run: curl -X POST ${{ https://api.render.com/deploy/srv-d9j19k7aqgkc73aqmgmg?key=-H7n7mFdxJ4 }}
