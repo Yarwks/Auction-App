@@ -2,21 +2,62 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import API from '../api/axios';
 
+function formatDuration(ms) {
+  const totalSeconds = Math.max(Math.floor(ms / 1000), 0);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  const parts = [];
+
+  if (days) parts.push(`${days}d`);
+  if (hours || days) parts.push(`${hours.toString().padStart(2, '0')}h`);
+  if (minutes || hours || days) parts.push(`${minutes.toString().padStart(2, '0')}m`);
+  parts.push(`${seconds.toString().padStart(2, '0')}s`);
+
+  return parts.join(' ');
+}
+
 export default function AuctionDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [amount, setAmount] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const [timeLeft, setTimeLeft] = useState('');
 
   const fetchProduct = async () => {
     try {
-      const res = await API.get(`/products/${id}/`); 
+      const res = await API.get(`/products/${id}/`);
       setProduct(res.data);
     } catch (err) {
       console.error("couldn't fetch product detail", err);
     }
   };
+
+  useEffect(() => {
+    if (!product?.end_time) {
+      return undefined;
+    }
+
+    const updateTime = async () => {
+      const endDate = new Date(product.end_time);
+      const diff = endDate.getTime() - Date.now();
+      if (diff <= 0) {
+        setTimeLeft('Auction closed');
+        if (product.is_active) {
+          await fetchProduct();
+        }
+        return;
+      }
+      setTimeLeft(formatDuration(diff));
+    };
+
+    updateTime();
+    const intervalId = setInterval(updateTime, 1000);
+    return () => clearInterval(intervalId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product]);
 
   useEffect(() => {
     /* eslint-disable-next-line react-hooks/set-state-in-effect */
@@ -50,8 +91,23 @@ export default function AuctionDetail() {
 
   return (
     <div className="max-w-2xl mx-auto bg-white border p-6 rounded-lg shadow-sm space-y-6">
-      <div className="flex justify-between items-start">
-        <h1 className="text-2xl font-bold">{product.title}</h1>
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+        <div>
+          <h1 className="text-2xl font-bold">{product.title}</h1>
+          <p className="text-sm text-gray-500 mt-1">
+            {product.is_active ? (
+              <>
+                <span className="font-semibold">Time remaining:</span> {timeLeft || 'calculating...'}
+              </>
+            ) : (
+              <>
+                <span className="font-semibold">Auction ended:</span>{' '}
+                {new Date(product.end_time).toLocaleString()}
+              </>
+            )}
+          </p>
+        </div>
+
         <span
           className={`text-xs font-bold px-2.5 py-1 rounded ${
             product.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
