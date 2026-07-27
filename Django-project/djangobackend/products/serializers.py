@@ -31,13 +31,20 @@ class BidSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     seller_username = serializers.ReadOnlyField(source='seller.username')
+    winner_username = serializers.ReadOnlyField(source='winner.username')
+    highest_bidder_username = serializers.SerializerMethodField()
     bids = BidSerializer(many=True, read_only=True)
 
     class Meta:
         model = Product
         fields = [
-            'id', 'title', 'description', 'starting_bid', 
-            'current_price', 'seller', 'seller_username', 
-            'winner', 'start_time', 'end_time', 'is_active', 'bids'
+            'id', 'title', 'description', 'starting_bid',
+            'current_price', 'seller', 'seller_username',
+            'winner', 'winner_username', 'highest_bidder_username',
+            'start_time', 'end_time', 'is_active', 'bids'
         ]
         read_only_fields = ['seller', 'current_price', 'winner']
+
+    def get_highest_bidder_username(self, obj):
+        highest_bid = obj.bids.order_by('-amount').first()
+        return highest_bid.bidder.username if highest_bid else None

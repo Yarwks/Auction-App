@@ -119,14 +119,26 @@ export default function AuctionDetail() {
 
       <p className="text-gray-600">{product.description}</p>
 
-      <div className="bg-gray-50 p-4 rounded border flex justify-between items-center">
-        <div>
-          <p className="text-xs text-gray-500 uppercase font-semibold">Current Highest Price</p>
-          <p className="text-3xl font-extrabold text-black">KSh {product.current_price}</p>
+      <div className="bg-gray-50 p-4 rounded border">
+        <div className="flex justify-between items-center mb-3">
+          <div>
+            <p className="text-xs text-gray-500 uppercase font-semibold">Current Highest Price</p>
+            <p className="text-3xl font-extrabold text-black">KSh {product.current_price}</p>
+          </div>
+          <div className="text-right">
+            <p className="text-xs text-gray-500">Seller</p>
+            <p className="text-sm font-semibold">{product.seller_username}</p>
+          </div>
         </div>
-        <div className="text-right">
-          <p className="text-xs text-gray-500">Seller</p>
-          <p className="text-sm font-semibold">{product.seller_username}</p>
+        <div className="flex justify-between items-center gap-4 text-sm text-gray-600">
+          <div>
+            <p className="text-xs uppercase font-semibold text-gray-500">Highest bidder</p>
+            <p className="font-semibold">{product.highest_bidder_username || 'No bids yet'}</p>
+          </div>
+          <div>
+            <p className="text-xs uppercase font-semibold text-gray-500">Winner</p>
+            <p className="font-semibold">{product.winner_username || 'TBD'}</p>
+          </div>
         </div>
       </div>
 
@@ -155,7 +167,7 @@ export default function AuctionDetail() {
         </form>
       ) : (
         <div className="bg-red-50 p-3 rounded border border-red-200 text-red-700 text-sm">
-          Auction ended. Winner: <span className="font-bold">{product.winner || 'No bids'}</span>
+          Auction ended. Winner: <span className="font-bold">{product.winner_username || 'No bids'}</span>
         </div>
       )}
     </div>
