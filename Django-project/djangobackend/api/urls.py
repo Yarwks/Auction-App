@@ -1,6 +1,6 @@
 from django.urls import path
 from users.views import RegisterView
-from products.views import ProductListCreateView, PlaceBidView
+from products.views import ProductListCreateView, ProductDetailView, PlaceBidView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
@@ -11,5 +11,6 @@ urlpatterns = [
 
     # product/bid routes
     path('products/', ProductListCreateView.as_view(), name='product-list'),
+    path('products/<int:pk>/', ProductDetailView.as_view(), name='product-detail'),
     path('bids/', PlaceBidView.as_view(), name='place-bid'),
 ]

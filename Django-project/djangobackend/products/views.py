@@ -1,8 +1,9 @@
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions, serializers, status
 from rest_framework.response import Response
 from django.db import transaction
 from .models import Product, Bid
 from .serializers import ProductSerializer, BidSerializer
+from .permissions import IsSellerOrReadOnly
 
 class ProductListCreateView(generics.ListCreateAPIView):
     serializer_class = ProductSerializer
@@ -23,21 +24,40 @@ class PlaceBidView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        product = serializer.validated_data['product']
-        
-        product.check_and_close_auction()
-
-        if not product.is_active:
-            raise serializers.ValidationError("This auction is already over")
-
+        product_id = serializer.validated_data['product'].id
         amount = serializer.validated_data['amount']
 
         with transaction.atomic():
-            serializer.save(bidder=self.request.user)
+            # select_for_update() locks this row for the rest of the
+            # transaction. Without it, two bids placed at the same instant
+            # can both read the same current_price, both pass validation,
+            # and then race to overwrite each other - the lower bid could
+            # "win" if its write lands last. Locking forces the second
+            # request to wait until the first one commits, so it always
+            # re-checks against the up-to-date price.
+            product = Product.objects.select_for_update().get(pk=product_id)
+
+            product.check_and_close_auction()
+
+            if not product.is_active:
+                raise serializers.ValidationError("This auction is already over")
+
+            if amount <= product.current_price:
+                raise serializers.ValidationError(
+                    f"Bid must be greater than current price of {product.current_price}."
+                )
+
+            serializer.save(bidder=self.request.user, product=product)
             product.current_price = amount
             product.save()
 
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsSellerOrReadOnly]
     lookup_field = 'pk'
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.check_and_close_auction()
+        return super().retrieve(request, *args, **kwargs)

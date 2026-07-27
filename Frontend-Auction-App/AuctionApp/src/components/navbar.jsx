@@ -18,11 +18,11 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-black text-white px-6 py-4 flex justify-between items-center shadow-md mb-8">
-      <Link to="/" className="text-xl font-black tracking-wider">
-        AUCTION<span className="text-gray-400">APP</span> 
-      </Link>
-      <div className="flex gap-4 items-center text-sm font-semibold">
+    <nav className="bg-black text-white px-6 py-4 flex justify-center items-center shadow-md mb-8">
+      <div className="flex gap-8 items-center text-sm font-semibold">
+        <Link to="/" className="text-xl font-black tracking-wider">
+          AUCTION<span className="text-gray-400">APP</span>
+        </Link>
         {token ? (
           <>
             <Link to="/" className="hover:text-gray-300">Dashboard</Link>

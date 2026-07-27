@@ -3,6 +3,10 @@ from django.conf import settings
 from django.utils import timezone
 
 
+def default_end_time():
+    return timezone.now() + timezone.timedelta(days=7)
+
+
 # Create your models here.
 class Product(models.Model):
     title = models.CharField(max_length=255, default=None, null=True, blank=True)
@@ -23,7 +27,7 @@ class Product(models.Model):
         related_name='won_auctions'
     )
     start_time = models.DateTimeField(default=timezone.now)
-    end_time = models.DateTimeField(default=timezone.now() + timezone.timedelta(days=7))
+    end_time = models.DateTimeField(default=default_end_time)
     is_active = models.BooleanField(default=True)
 
     def check_and_close_auction(self):

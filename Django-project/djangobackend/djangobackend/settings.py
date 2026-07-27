@@ -89,6 +89,14 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        # SQLite only allows one writer at a time. Without a busy timeout,
+        # a second concurrent write fails immediately with "database is
+        # locked" instead of waiting its turn. This makes it wait up to 20s
+        # for the lock to free up (Postgres wouldn't need this - it handles
+        # concurrent writers natively).
+        'OPTIONS': {
+            'timeout': 20,
+        },
     }
 }
 
