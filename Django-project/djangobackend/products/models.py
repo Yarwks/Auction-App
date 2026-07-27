@@ -7,7 +7,6 @@ def default_end_time():
     return timezone.now() + timezone.timedelta(days=7)
 
 
-# Create your models here.
 class Product(models.Model):
     title = models.CharField(max_length=255, default=None, null=True, blank=True)
     description = models.TextField(default=None, null=True, blank=True)

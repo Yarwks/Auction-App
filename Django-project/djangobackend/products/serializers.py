@@ -22,7 +22,7 @@ class BidSerializer(serializers.ModelSerializer):
 
         if amount <= product.current_price:
             raise serializers.ValidationError(
-                f"Bid must be greater than current price of {product.current_price}."
+                f"Bid must be greater than current price of KSh {product.current_price}."
             )
 
 

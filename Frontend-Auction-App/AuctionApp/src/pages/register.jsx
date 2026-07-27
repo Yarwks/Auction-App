@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import API from '../api/axios';
 
 export default function Register() {
@@ -50,6 +50,12 @@ export default function Register() {
           Register
         </button>
       </form>
+      <p className="text-sm text-gray-600 text-center mt-4">
+        Already have an account?{' '}
+        <Link to="/login" className="text-black font-semibold hover:underline">
+          Login
+        </Link>
+      </p>
     </div>
   );
 }

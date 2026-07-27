@@ -20,7 +20,7 @@ export default function ProductCard({ product }) {
       <div className="pt-3 border-t flex justify-between items-center">
         <div>
           <span className="text-xs text-gray-400 block font-semibold">Current Price</span>
-          <span className="text-lg font-black text-black">${product.current_price || product.starting_bid}</span>
+          <span className="text-lg font-black text-black">KSh {product.current_price || product.starting_bid}</span>
         </div>
         <Link
           to={`/auctions/${product.id}`}

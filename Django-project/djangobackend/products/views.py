@@ -28,13 +28,6 @@ class PlaceBidView(generics.CreateAPIView):
         amount = serializer.validated_data['amount']
 
         with transaction.atomic():
-            # select_for_update() locks this row for the rest of the
-            # transaction. Without it, two bids placed at the same instant
-            # can both read the same current_price, both pass validation,
-            # and then race to overwrite each other - the lower bid could
-            # "win" if its write lands last. Locking forces the second
-            # request to wait until the first one commits, so it always
-            # re-checks against the up-to-date price.
             product = Product.objects.select_for_update().get(pk=product_id)
 
             product.check_and_close_auction()
@@ -44,7 +37,7 @@ class PlaceBidView(generics.CreateAPIView):
 
             if amount <= product.current_price:
                 raise serializers.ValidationError(
-                    f"Bid must be greater than current price of {product.current_price}."
+                    f"Bid must be greater than current price of KSh {product.current_price}."
                 )
 
             serializer.save(bidder=self.request.user, product=product)

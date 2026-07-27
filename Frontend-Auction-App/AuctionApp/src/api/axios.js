@@ -14,9 +14,6 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
-// If an access token has expired (401), try to use the refresh token to get
-// a new one and retry the original request once, instead of just letting
-// the user get silently logged out an hour into their session.
 let isRefreshing = false;
 let pendingRequests = [];
 
@@ -42,7 +39,6 @@ API.interceptors.response.use(
     config._retry = true;
 
     if (isRefreshing) {
-      // another request already kicked off a refresh; wait for it
       return new Promise((resolve, reject) => {
         pendingRequests.push((newToken) => {
           if (!newToken) return reject(error);

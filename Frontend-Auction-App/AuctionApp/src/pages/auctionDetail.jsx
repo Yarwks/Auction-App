@@ -19,9 +19,6 @@ export default function AuctionDetail() {
   };
 
   useEffect(() => {
-    // fetchProduct is intentionally called directly here (fetch-on-mount)
-    // and is also reused in handleBid to refresh the product after a bid,
-    // so it isn't a plain effect dependency.
     /* eslint-disable-next-line react-hooks/set-state-in-effect */
     fetchProduct();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -69,7 +66,7 @@ export default function AuctionDetail() {
       <div className="bg-gray-50 p-4 rounded border flex justify-between items-center">
         <div>
           <p className="text-xs text-gray-500 uppercase font-semibold">Current Highest Price</p>
-          <p className="text-3xl font-extrabold text-black">${product.current_price}</p>
+          <p className="text-3xl font-extrabold text-black">KSh {product.current_price}</p>
         </div>
         <div className="text-right">
           <p className="text-xs text-gray-500">Seller</p>
@@ -86,7 +83,7 @@ export default function AuctionDetail() {
             <input
               type="number"
               step="0.01"
-              placeholder={`Must be > $${product.current_price}`}
+              placeholder={`Must be > KSh ${product.current_price}`}
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               className="border p-2 rounded text-sm flex-1"

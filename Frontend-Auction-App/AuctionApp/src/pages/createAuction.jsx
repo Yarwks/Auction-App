@@ -57,7 +57,7 @@ export default function CreateAuction() {
         </div>
 
         <div>
-          <label className="text-xs font-semibold text-gray-600">Starting Price ($)</label>
+          <label className="text-xs font-semibold text-gray-600">Starting Price (KSh)</label>
           <input
             type="number"
             step="0.01"

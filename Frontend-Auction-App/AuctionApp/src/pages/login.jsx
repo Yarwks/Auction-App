@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import API from '../api/axios';
 
 export default function Login() {
@@ -44,6 +45,12 @@ export default function Login() {
           Login
         </button>
       </form>
+      <p className="text-sm text-gray-600 text-center mt-4">
+        Don't have an account?{' '}
+        <Link to="/register" className="text-black font-semibold hover:underline">
+          Register
+        </Link>
+      </p>
     </div>
   );
 }
