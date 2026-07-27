@@ -10,9 +10,12 @@ A simple online auction app. Users can register, list items for sale, and bid on
 - Place bids (must be higher than the current price)
 - Auction closes automatically once the end time passes, highest bidder wins
 
-Prices are shown in KSh.
 
 ## Tech stack
 
 - **Backend:** Django + Django REST Framework, SQLite database, JWT login
 - **Frontend:** React (Vite), Tailwind CSS, Axios
+
+## Links
+FrontEnd - https://auction-app-frontend-vtsp.onrender.com
+BAckEnd - https://auction-app-wby3.onrender.com
