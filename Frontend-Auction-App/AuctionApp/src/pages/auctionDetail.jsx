@@ -19,7 +19,12 @@ export default function AuctionDetail() {
   };
 
   useEffect(() => {
+    // fetchProduct is intentionally called directly here (fetch-on-mount)
+    // and is also reused in handleBid to refresh the product after a bid,
+    // so it isn't a plain effect dependency.
+    /* eslint-disable-next-line react-hooks/set-state-in-effect */
     fetchProduct();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const handleBid = async (e) => {

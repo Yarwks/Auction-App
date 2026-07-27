@@ -22,7 +22,7 @@ export default function CreateAuction() {
         starting_bid: parseFloat(formData.starting_bid),
       });
       navigate('/');
-    } catch (err) {
+    } catch {
       setError('failed to create auction listing');
     }
   };

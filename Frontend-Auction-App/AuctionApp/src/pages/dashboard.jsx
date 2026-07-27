@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import API from '../api/axios';
-import Navbar from '../components/navbar';
 import Searchbar from '../components/searchbar';
 import ProductCard from '../components/productcard';
 

@@ -1,15 +1,14 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [token, setToken] = useState(null);
-
-  useEffect(() => {
-    setToken(localStorage.getItem('access_token'));
-  }, [location]);
+  // Reading useLocation() here means this component re-renders on every
+  // route change, so re-reading localStorage directly during render (rather
+  // than via useState+useEffect) keeps the login state in sync without an
+  // unnecessary extra render pass.
+  useLocation();
+  const token = localStorage.getItem('access_token');
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');

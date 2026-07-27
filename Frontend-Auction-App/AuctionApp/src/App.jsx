@@ -1,12 +1,10 @@
-import { BrowserRouter, Routes, Router, Route } from 'react-router-dom'
-import react from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Register from './pages/register'
 import Profile from './pages/profile'
 import Login from './pages/login'
 import Dashboard from './pages/dashboard'
 import CreateAuction from './pages/createAuction'
 import AuctionDetail from './pages/auctionDetail'
-import ProductCard from './components/productcard'
 import Navbar from './components/navbar' 
 
 

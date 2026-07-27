@@ -1,11 +1,9 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import API from '../api/axios';
 
 export default function Login() {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,7 +14,7 @@ export default function Login() {
       localStorage.setItem('refresh_token', res.data.refresh);
       
       window.location.href = '/'; 
-    } catch (err) {
+    } catch {
       setError('invalid username or password!');
     }
   };
